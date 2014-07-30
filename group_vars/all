@@ -18,12 +18,12 @@ mongodb_host: "{{ hostvars[groups['mongodb'][0]]|find_ip(management_network) }}"
 
 rabbit_host: "{{ hostvars[groups['rabbitmq'][0]]|find_ip(management_network) }}"
 
-keystone_endpoint_host: "{{ hostvars[groups['keystone'][0]]|find_ip(management_network) }}"
+keystone_endpoint_host: 10.1.0.2
 keystone_internal_url: http://{{ keystone_endpoint_host }}:5000/v2.0
 keystone_admin_url: http://{{ keystone_endpoint_host }}:35357/v2.0
-keystone_public_url: http://{{ hostvars[groups['keystone'][0]]|find_ip(api_network) }}:5000/v2.0
+keystone_public_url: http://10.2.0.2:5000/v2.0
 
-keystone_admin_token: "{{ lookup('password', inventory_dir + '/credentials/keystone-admin-token') }}"
+keystone_admin_token: ",Aw8EoOqR4Jjx2hU8ZWv"
 
 glance_endpoint_host: "{{ hostvars[groups['glance'][0]]|find_ip(management_network) }}"
 glance_internal_url: http://{{ glance_endpoint_host }}:9292 

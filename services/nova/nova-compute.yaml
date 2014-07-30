@@ -12,18 +12,18 @@
       shell: chmod 0644 /boot/vmlinuz*
 
     - name: ensure nova-compute packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items:
-        - "{{ nova_compute_package }}"
-        - python-guestfs
+        - "openstack-nova-compute"
+        - python-libguestfs
       
     - name: ensure services are stopped
       service: 
-        name: nova-compute 
+        name: openstack-nova-compute 
         state: stopped
 
     - name: ensure nova.conf file is present
@@ -44,7 +44,7 @@
 
     - name: ensure compute service is started and enabled
       service: 
-        name: nova-compute 
+        name: openstack-nova-compute 
         state: restarted 
         enabled: yes
 

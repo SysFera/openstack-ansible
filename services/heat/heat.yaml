@@ -6,13 +6,13 @@
   vars:
     component: heat
     packages:
-      - "{{ component }}-api"
-      - "{{ component }}-api-cfn"
-      - "{{ component }}-engine"
+      - "openstack-{{ component }}-api"
+      - "openstack-{{ component }}-api-cfn"
+      - "openstack-{{ component }}-engine"
     services:
-      - "{{ component }}-api"
-      - "{{ component }}-api-cfn"
-      - "{{ component }}-engine"
+      - "openstack-{{ component }}-api"
+      - "openstack-{{ component }}-api-cfn"
+      - "openstack-{{ component }}-engine"
     config_files:
       - "{{ component }}.conf"
       - api-paste.ini
@@ -20,11 +20,11 @@
   tasks:
 
     - name: ensure {{ component }} packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

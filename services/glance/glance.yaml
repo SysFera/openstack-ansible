@@ -6,10 +6,10 @@
   vars:
     component: glance 
     packages:
-      - glance
+      - openstack-glance
     services:
-      - glance-api
-      - glance-registry
+      - openstack-glance-api
+      - openstack-glance-registry
     config_files:
       - glance-api.conf
       - glance-api-paste.ini
@@ -19,11 +19,11 @@
   tasks:
 
     - name: ensure {{ component }} packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

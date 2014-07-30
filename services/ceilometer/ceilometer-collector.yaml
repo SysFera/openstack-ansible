@@ -6,22 +6,22 @@
   vars:
     component: ceilometer
     packages:
-      - "{{ component }}-collector"
-      - "{{ component }}-agent-central"
+      - "openstack-{{ component }}-collector"
+      - "openstack-{{ component }}-central"
     services:
-      - "{{ component }}-collector"
-      - "{{ component }}-agent-central"
+      - "openstack-{{ component }}-collector"
+      - "openstack-{{ component }}-central"
     config_files:
       - "{{ component }}.conf"
 
   tasks:
 
     - name: ensure {{ component }}-collector packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

@@ -6,9 +6,9 @@
   vars:
     component: neutron
     packages:
-        - neutron-dhcp-agent
-        - neutron-metadata-agent
-        - neutron-l3-agent
+        - openstack-neutron
+        - openstack-neutron-ml2
+        - openstack-neutron-openvswitch
     services:
         - neutron-dhcp-agent
         - neutron-metadata-agent
@@ -24,19 +24,19 @@
 
     - name: ensure iptables configuration is present
       template: 
-        src: templates/etc/iptables.rules 
-        dest: /etc/iptables.rules 
+        src: templates/etc/sysconfig/iptables.save 
+        dest: /etc/sysconfig/iptables.save
         owner: root 
         group: root 
         mode: 0644
 
     - name: load iptables rules
-      shell: /sbin/iptables-restore < /etc/iptables.rules
+      shell: /sbin/iptables-restore < /etc/sysconfig/iptables.save
 
     - name: ensure iptables configuration is loaded at boot
       template: 
         src: templates/etc/network/if-pre-up.d/iptablesload 
-        dest: /etc/network/if-pre-up.d/iptablesload 
+        dest: /etc/sysconfig/network-scripts/iptablesload 
         owner: root 
         group: root 
         mode: 0755
@@ -50,20 +50,20 @@
     - name: ensure script to configure network is in place
       template: 
         src: templates/etc/network/if-pre-up.d/configure_br-ex
-        dest: /etc/network/if-pre-up.d/configure_br-ex
+        dest: /etc/sysconfig/network-scripts/configure_br-ex
         owner: root 
         group: root 
         mode: 0755
 
     - name: ensure configure script is run at least once
-      command: /etc/network/if-pre-up.d/configure_br-ex
+      command: /etc/sysconfig/network-scripts/configure_br-ex
 
     - name: ensure {{ component }}-network packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

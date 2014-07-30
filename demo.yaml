@@ -124,7 +124,7 @@
       command: ssh-keygen -q -f {{ ansible_env['HOME'] }}/.ssh/id_rsa -P ""
                creates={{ ansible_env['HOME'] }}/.ssh/id_rsa
 
-    - name: capture public key in variable
+    - name: cyumure public key in variable
       command: cat {{ ansible_env['HOME'] }}/.ssh/id_rsa.pub
       register: pubkey
 

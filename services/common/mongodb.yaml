@@ -6,18 +6,19 @@
   tasks:
 
     - name: ensure mongodb is installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items:
         - mongodb
+        - mongodb-server
         - python-pymongo 
 
     - name: ensure mongodb is stopped
       service: 
-        name: mongodb
+        name: mongod
         state: stopped
 
     - name: install mongodb config file that binds to management network interface
@@ -30,6 +31,6 @@
 
     - name: ensure mongodb is started and enabled
       service: 
-        name: mongodb
+        name: mongod
         state: restarted 
         enabled: yes

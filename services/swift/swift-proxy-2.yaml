@@ -35,4 +35,4 @@
         enabled: yes
       with_items:
         - memcached
-        - swift-proxy
+        - openstack-swift-proxy

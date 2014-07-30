@@ -8,14 +8,14 @@
     packages:
       - memcached
       - python-keystoneclient
-      - python-memcache
+      - python-memcached
       - python-swiftclient
       - python-webob
-      - "{{ component }}"
-      - "{{ component }}-proxy"
+      - "openstack-{{ component }}"
+      - "openstack-{{ component }}-proxy"
     services:
       - memcached
-      - "{{ component }}-proxy"
+      - "openstack-{{ component }}-proxy"
     config_files:
       - "{{ component }}.conf"
       - proxy-server.conf
@@ -23,11 +23,11 @@
   tasks:
 
     - name: ensure {{ component }}-proxy packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped
