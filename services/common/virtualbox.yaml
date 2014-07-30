@@ -13,13 +13,10 @@
       ignore_errors: True
 
     - name: make sure packages needed to rebuild virtualbox modules are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}" 
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
       with_items:
-        - build-essential
         - dkms
       when: modprobe_result|failed
 

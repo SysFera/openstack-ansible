@@ -5,8 +5,8 @@ machines. These scripts are based on the [Official OpenStack
 Docmentation](http://docs.openstack.org/), havana release, except where
 otherwise noted.
 
-See also [Vagrant, Ansible and OpenStack on your laptop]
-(http://www.slideshare.net/lorinh/vagrant-ansible-and-openstack-on-your-laptop)
+See also [Vagrant, Ansible and OpenStack on your lyumop]
+(http://www.slideshare.net/lorinh/vagrant-ansible-and-openstack-on-your-lyumop)
 on SlideShare, though this refers to a much older version of this repo and so is 
 now out of date.
 
@@ -33,7 +33,7 @@ variables, no other installation is required:
 
 Download a 64-bit Ubuntu Vagrant box:
 
-	vagrant box add precise64 http://files.vagrantup.com/precise64.box
+	vagrant box add precise64 http://lyte.id.au/vagrant/sl6-64-lyte.box
 
 ## Grab this repository
 
@@ -83,3 +83,141 @@ have the [python-novaclient](http://pypi.python.org/pypi/python-novaclient/)
 installed.
 
 Note that the openrc file will be created on the controller by default.
+
+
+## Work In Progress : SysFera workaround.
+
+
+controller :
+paquet openstack-keystone
+	python-keystone
+
+Une fois installée il faut executer keystone-manage pki_setup --keystone-user 163 --keystone-group 163
+
+sudo ln -s /var/run/mysqld/mysqld.sock /var/lib/mysql/mysql.sock
+
+installer sur storage :  
+
+::
+
+rsync :  cat /etc/init.d/rsync
+#! /bin/sh
+#
+# chkconfig:   2345 50 50
+# description: The rsync daemon
+
+# source function library
+ . /etc/rc.d/init.d/functions
+
+PROG='/usr/bin/rsync'
+BASE=${0##*/}
+
+# Adapt the --config parameter to point to your rsync daemon configuration
+# The config file must contain following line:
+#  pid file = /var/run/<filename>.pid
+# Where <filename> is the filename of the init script (= this file)
+OPTIONS="--daemon --config=/etc/rsyncd.conf"
+
+case "$1" in
+  start)
+    echo -n $"Starting $BASE: "
+    daemon --check $BASE $PROG $OPTIONS
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$BASE
+    echo
+    ;;
+  stop)
+    echo -n $"Shutting down $BASE: "
+    killproc $BASE
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$BASE
+    echo
+    ;;
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+
+
+Sur storage 
+/etc/init.d/quantum-server !
+
+::
+
+#! /bin/sh
+#
+# chkconfig:   2345 50 50
+# description: The rsync daemon
+
+# source function library
+ . /etc/rc.d/init.d/functions
+
+PROG='quantum-server'
+BASE=${0##*/}
+
+# Adapt the --config parameter to point to your rsync daemon configuration
+# The config file must contain following line:
+#  pid file = /var/run/<filename>.pid
+# Where <filename> is the filename of the init script (= this file)
+OPTIONS="--config-file /etc/neutron/neutron.conf &"
+case "$1" in
+  start)
+    echo -n $"Starting $BASE: "
+    daemon --check $BASE $PROG $OPTIONS
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$BASE
+    echo
+    ;;
+  stop)
+    echo -n $"Shutting down $BASE: "
+    killproc $BASE
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$BASE
+    echo
+    ;;
+  restart|force-reload)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    echo "Usage: $0 {start|stop|restart|force-reload}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0
+
+
+
+copier le template rsyncd pour que ansible puisse faire restart
+
+virer [enable rsync in /etc/default]
+
+
+* :
+Voir les /etc/default
+
+storage Port : iptables -F rsync
+
+
+====FAQ 
+fatal: [controller] => {'msg': "file: /home/sysfera/soft/vagrant/openstack-ansible/services/cinder/templates/etc/cinder/cinder.conf, line number: 261, error: no filter named 'find_ip'", 'failed': True}
+fatal: [controller] => {'msg': 'One or more items failed.', 'failed': True, 'changed': False, 'results': [{'msg': "file: /home/sysfera/soft/vagrant/openstack-ansible/services/cinder/templates/etc/cinder/cinder.conf, line number: 261, error: no filter named 'find_ip'", 'failed': True}]}
+
+FATAL: all hosts have already failed -- aborting
+
+il faut recopier les lib utils compilés cp -R services/swift/filter_plugins/ services/cinder/
+
+
+=== 
+Heat ne pase pas : probleme avec keystone. Il n'est pas capable de faire 
+

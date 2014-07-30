@@ -6,22 +6,21 @@
   vars:
     component: nova
     packages:
-      - nova-ajax-console-proxy
-      - nova-api
-      - nova-cert
-      - nova-conductor
-      - nova-consoleauth
-      - nova-novncproxy
-      - nova-scheduler
+      - openstack-nova-api
+      - openstack-nova-cert
+      - openstack-nova-conductor
+      - openstack-nova-console
+      - openstack-nova-novncproxy
+      - openstack-nova-scheduler
       - novnc
       - python-novaclient
     services:
-      - nova-api
-      - nova-cert
-      - nova-conductor
-      - nova-consoleauth
-      - nova-scheduler
-      - nova-novncproxy
+      - openstack-nova-api
+      - openstack-nova-cert
+      - openstack-nova-conductor
+      - openstack-nova-consoleauth
+      - openstack-nova-scheduler
+      - openstack-nova-novncproxy
     config_files:
       - "{{ component }}.conf"
       - api-paste.ini
@@ -29,11 +28,11 @@
   tasks:
 
     - name: ensure {{ component }}-controller packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

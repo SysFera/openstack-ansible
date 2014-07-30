@@ -5,11 +5,12 @@
   gather_facts: True
   vars:
     component: neutron
-    subcomponent: server
+    subcomponent: openvswitch
     packages:
-      - "{{ component }}-{{ subcomponent }}"
+      - "openstack-{{ component }}-{{ subcomponent }}"
     services:
-      - "{{ component }}-{{ subcomponent }}"
+      - "openvswitch"
+      - "quantum-server"
     config_files:
       - "{{ component }}.conf"
       - api-paste.ini
@@ -17,11 +18,11 @@
   tasks:
 
     - name: ensure {{ component }}-{{ subcomponent }} packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped

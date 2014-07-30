@@ -6,21 +6,16 @@
   tasks:
 
     - name: ensure packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}" 
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: 
-        - libapache2-mod-wsgi
+        - mod_wsgi
         - memcached 
         - openstack-dashboard 
 
-    - name: ensure ubuntu theme is removed
-      apt: 
-        pkg: openstack-dashboard-ubuntu-theme 
-        state: absent 
-        purge: yes
 
     - name: ensure services are stopped
       service:
@@ -28,7 +23,7 @@
         state: stopped
       with_items:
         - memcached
-        - apache2
+        - httpd
 
     - name: update memcached.conf from template
       template:
@@ -53,4 +48,4 @@
         enabled: yes
       with_items:
         - memcached
-        - apache2
+        - httpd

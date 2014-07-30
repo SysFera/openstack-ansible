@@ -4,33 +4,40 @@
   sudo: True
   gather_facts: True
   tasks:
+    - name: Downloading and enable the EPEL repository definitions.
+      action: command rpm -Uvh --replacepkgs http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
-    - name: update apt cache
-      apt: 
-        update_cache: yes
+    - name: Downloading and enable the CERN repository definitions (PYTHON 2.7)
+      action: command wget http://linuxsoft.cern.ch/cern/scl/slc6-scl.repo --output-document=/etc/yum.repos.d/slc6-scl.repo
 
-    - name: ensure required base packages are present
-      apt: 
+    - name: Enable havana repositorie
+      yum: 
         pkg: "{{ item }}" 
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
-      with_items:
-        - chrony
-        - python-mysqldb
-        - python-software-properties
 
-    - name: ensure needed repositories are present
-      command: apt-add-repository -y "{{ item }}"
-      with_items: openstack_repositories
+      with_items:
+         - http://repos.fedorapeople.org/repos/openstack/openstack-havana/rdo-release-havana-7.noarch.rpm
+
+
+    - name: update yum cache
+      yum: 
+        name=* state=latest
+
+    - name: ensure required base packages are present
+      yum: 
+        pkg: "{{ item }}" 
+        state: latest 
+
+      with_items:
+	- openstack-selinux
+        - chrony
+        - MySQL-python
+        - openstack-utils
+
 
     - name: upgrade software packages to latest version
-      apt: 
-        update_cache: yes
-        upgrade: dist 
+      yum: name=* state=latest
 
-    - name: autoremove unneeded packages
-      command: apt-get -y autoremove
 
     - name: register running kernel version
       command: uname -r
@@ -40,19 +47,19 @@
       shell: dpkg -l | grep "linux-image-[0-9]" | sort | tail -1 | perl -ane 'print substr($F[1], 12), "\n"'
       register: installed_kernel
 
-    - name: reboot if kernel version has changed
-      include: reboot.yaml
-      when: installed_kernel.stdout != running_kernel.stdout
+#    - name: reboot if kernel version has changed
+#      include: reboot.yaml
+#      when: installed_kernel.stdout != running_kernel.stdout
 
     - name: ensure chrony server is stopped
       service: 
-        name: chrony
+        name: chronyd
         state: stopped
 
     - name: install chrony.conf 
       template: 
         src: templates/etc/chrony/chrony.conf 
-        dest: /etc/chrony/chrony.conf 
+        dest: /etc/chrony.conf 
         owner: root 
         group: root 
         mode: 0644
@@ -86,7 +93,7 @@
 
     - name: make sure chrony is started and enabled everywhere
       service: 
-        name: chrony
+        name: chronyd
         state: restarted 
         enabled: yes
 

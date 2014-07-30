@@ -7,12 +7,10 @@
     component: neutron
     subcomponent: openvswitch
     packages:
-      - openvswitch-common
-      - openvswitch-switch
-      - neutron-plugin-openvswitch-agent
+      - openstack-openvswitch
+      - openstack-neutron-openvswitch
     services:
-      - neutron-plugin-openvswitch-agent
-      - openvswitch-switch
+      - neutron-openvswitch-agent
     config_files:
       - "{{ component }}.conf"
       - api-paste.ini
@@ -44,11 +42,11 @@
         state: present
 
     - name: ensure {{ component }}-{{ subcomponent }} packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped
@@ -93,11 +91,11 @@
       register: modprobe_result
 
     - name: ensure packages to build openvswitch module are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}" 
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items:
         - build-essential
         - dkms

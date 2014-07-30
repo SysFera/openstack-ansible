@@ -10,25 +10,25 @@
     packages:
       - python-xattr
       - rsync
-      - "{{ component }}"
-      - "{{ component }}-account"
-      - "{{ component }}-container"
-      - "{{ component }}-object"
+      - "openstack-{{ component }}"
+      - "openstack-{{ component }}-account"
+      - "openstack-{{ component }}-container"
+      - "openstack-{{ component }}-object"
       - xfsprogs
     services:
       - rsync
-      - "{{ component }}-account"
-      - "{{ component }}-account-auditor"
-      - "{{ component }}-account-reaper"
-      - "{{ component }}-account-replicator"
-      - "{{ component }}-container"
-      - "{{ component }}-container-auditor"
-      - "{{ component }}-container-replicator"
-      - "{{ component }}-container-updater"
-      - "{{ component }}-object"
-      - "{{ component }}-object-auditor"
-      - "{{ component }}-object-replicator"
-      - "{{ component }}-object-updater"
+      - "openstack-{{ component }}-account"
+      - "openstack-{{ component }}-account-auditor"
+      - "openstack-{{ component }}-account-reaper"
+      - "openstack-{{ component }}-account-replicator"
+      - "openstack-{{ component }}-container"
+      - "openstack-{{ component }}-container-auditor"
+      - "openstack-{{ component }}-container-replicator"
+      - "openstack-{{ component }}-container-updater"
+      - "openstack-{{ component }}-object"
+      - "openstack-{{ component }}-object-auditor"
+      - "openstack-{{ component }}-object-replicator"
+      - "openstack-{{ component }}-object-updater"
     config_files:
       - "{{ component }}.conf"
       - account-server.conf
@@ -38,11 +38,11 @@
   tasks:
 
     - name: ensure {{ component }}-storage packages are installed
-      apt: 
+      yum: 
         pkg: "{{ item }}"
         state: latest 
-        update_cache: yes 
-        cache_valid_time: 600
+         
+        
       with_items: packages
 
     - name: ensure services are stopped
