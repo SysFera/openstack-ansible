@@ -14,7 +14,7 @@ BASE=${0##*/}
 # The config file must contain following line:
 #  pid file = /var/run/<filename>.pid
 # Where <filename> is the filename of the init script (= this file)
-OPTIONS="--config-file /etc/neutron/neutron.conf &"
+OPTIONS="--config-file=/etc/neutron/neutron.conf --config-file=/etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini --config-file=/etc/neutron/dhcp_agent.ini&"
 case "$1" in
   start)
     echo -n $"Starting $BASE: "

@@ -7,7 +7,7 @@
     component: neutron
     subcomponent: openvswitch
     packages:
-      - openstack-openvswitch
+      - openvswitch
       - openstack-neutron-openvswitch
     services:
       - neutron-openvswitch-agent
