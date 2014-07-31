@@ -33,7 +33,7 @@ variables, no other installation is required:
 
 Download a 64-bit Ubuntu Vagrant box:
 
-	vagrant box add precise64 http://lyte.id.au/vagrant/sl6-64-lyte.box
+	vagrant box add SLES6 http://lyte.id.au/vagrant/sl6-64-lyte.box
 
 ## Grab this repository
 
