@@ -46,9 +46,9 @@
       with_items: packages
 
     - name: install rsync service
-        template: 
-        src: templates/etc/init.d/rsyncd.sh 
-        dest: /etc/init.d/rsyncd.sh 
+      template: 
+        src: templates/etc/init.d/rsync
+        dest: /etc/init.d/rsync
         owner: root 
         group: root 
         mode: 0700
@@ -149,8 +149,8 @@
         group: root 
         mode: 0644
 
-    - name: enable rsync in /etc/default
-      command: sed -i '/^RSYNC_ENABLE=/s/false/true/' /etc/default/rsync
+    - name: enable rsync at startup
+      command: /sbin/chkconfig rsync on
 
     - name: ensure rsync service is started
       service: 

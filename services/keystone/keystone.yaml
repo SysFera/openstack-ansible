@@ -45,6 +45,9 @@
     - name: ensure database is synced
       command: /usr/bin/{{ component }}-manage db_sync
 
+    - name: workaround chown user on keystone.log
+      command: chown keystone:keystone /var/log/keystone/keystone.log
+
     - name: ensure services are started and enabled
       service: 
         name: "{{ item }}"

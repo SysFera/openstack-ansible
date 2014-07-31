@@ -25,10 +25,10 @@
         
       with_items: packages
     
-     - name: install rsync service
-        template: 
-        src: templates/etc/init.d/quantum-server.sh 
-        dest: /etc/init.d/quantum-server.sh
+    - name: install quantum service script
+      template: 
+        src: templates/etc/init.d/quantum-server
+        dest: /etc/init.d/quantum-server
         owner: root 
         group: root 
         mode: 0700

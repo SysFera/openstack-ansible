@@ -12,12 +12,8 @@
 
     - name: Enable havana repositorie
       yum: 
-        pkg: "{{ item }}" 
-        state: latest 
-
-      with_items:
-         - http://repos.fedorapeople.org/repos/openstack/openstack-havana/rdo-release-havana-7.noarch.rpm
-
+        name: http://repos.fedorapeople.org/repos/openstack/openstack-havana/rdo-release-havana-7.noarch.rpm 
+        state: present
 
     - name: update yum cache
       yum: 
@@ -29,10 +25,11 @@
         state: latest 
 
       with_items:
-	- openstack-selinux
+        - openstack-selinux
         - chrony
         - MySQL-python
         - openstack-utils
+        - rsync
 
 
     - name: upgrade software packages to latest version
