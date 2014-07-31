@@ -32,7 +32,7 @@
         enabled: yes
 
     - name: workaround
-      command : ln -s /var/run/mysqld/mysqld.sock /var/lib/mysql/mysql.sock
+      command : ln -s /var/lib/mysql/mysql.sock /var/lib/mysql/mysql.sock
 
     - name: update mysql root password for all root accounts
       mysql_user: 

@@ -45,11 +45,20 @@
         
       with_items: packages
 
+    - name: install rsync service
+        template: 
+        src: templates/etc/init.d/rsyncd.sh 
+        dest: /etc/init.d/rsyncd.sh 
+        owner: root 
+        group: root 
+        mode: 0700
+
     - name: ensure services are stopped
       service: 
         name: "{{ item }}"
         state: stopped
       with_items: services
+
 
     - name: ensure {{ component }} sqlite is deleted
       file: 
