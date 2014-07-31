@@ -22,6 +22,9 @@
         
       with_items: packages
 
+    - name: keystone pki update
+      command: keystone-manage pki_setup --keystone-user 163 --keystone-group 163
+
     - name: ensure services are stopped
       service: 
         name: "{{ item }}"
