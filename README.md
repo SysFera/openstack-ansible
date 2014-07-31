@@ -93,4 +93,4 @@ http://docs.openstack.org/havana/install-guide/install/apt/content/install-neutr
 
 
 Heat ne pase pas : probleme avec keystone. Il n'est pas capable de faire . Est-ce toujours le cas ?
-
+iptables -F sur toutes les machines !
