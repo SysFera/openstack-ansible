@@ -26,6 +26,7 @@ variables, no other installation is required:
 	sudo pip install paramiko PyYAML Jinja2 netaddr python-novaclient
 	git clone git://github.com/ansible/ansible.git
 	cd ./ansible
+	git checkout 45dde5b3e221e785d64c7b750ea1ec985d17caf9
 	source ./hacking/env-setup
 
 
