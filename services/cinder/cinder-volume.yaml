@@ -33,7 +33,6 @@
         vg: cinder-volumes
         pvs: "/dev/{{ volume_devices|join(',/dev/') }}"
         state: present
-        vg_options: ""
 
     - name: ensure services are stopped
       service: 
